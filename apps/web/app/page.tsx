@@ -1,11 +1,6 @@
 "use client";
 
-import { SignInButton, UserButton, auth } from "@clerk/nextjs";
-import { useAuth } from "@clerk/nextjs";
-
 export default function PlaygroundPage() {
-  const { isSignedIn } = useAuth();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900">
       {/* Header */}
@@ -31,15 +26,9 @@ export default function PlaygroundPage() {
               Docs
             </a>
 
-            {isSignedIn ? (
-              <UserButton />
-            ) : (
-              <SignInButton>
-                <button className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 transition">
-                  Sign In
-                </button>
-              </SignInButton>
-            )}
+            <button className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 transition">
+              Sign In
+            </button>
           </nav>
         </div>
       </header>
