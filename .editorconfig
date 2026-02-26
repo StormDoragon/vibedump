@@ -1,0 +1,7 @@
+* Check out our code with Unix line endings
+* Check in with Unix line endings
+* It would be best if all files had .gitattributes set
+
+# Automatically normalize line endings for all text files
+* text=auto
+

@@ -1,0 +1,28 @@
+name: Feature Request
+description: Suggest a new feature for Vibedump
+title: "[Feature] "
+labels: ["enhancement", "triage-me"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a feature! Please describe what you'd like to see.
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      placeholder: What should Vibedump do?
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      placeholder: Why would this be useful?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      placeholder: Any other ways to solve this?

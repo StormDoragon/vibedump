@@ -1,0 +1,41 @@
+{
+  "name": "vibedump",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Paste code → run in real Node browser sandbox → Grok roasts it → commit to GitHub → tweet the diff → pump.fun launch",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "format": "biome format --write .",
+    "ci": "turbo run lint type-check test"
+  },
+  "keywords": [
+    "sandbox",
+    "webcontainer",
+    "node.js",
+    "browser",
+    "grok-4",
+    "ai",
+    "solana",
+    "github",
+    "x-api",
+    "pump.fun"
+  ],
+  "author": {
+    "name": "Sarcastic Apes",
+    "url": "https://github.com/sarcasticapes/vibedump"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

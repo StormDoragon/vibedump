@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turbo.build/json-schema.json",
+  "version": "2",
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "interactive": true,
+      "persistent": true
+    },
+    "build": {
+      "inputs": ["src/**", "components/**", "lib/**", "app/**", "public/**"],
+      "outputs": [".next/**", ".turbo/**"],
+      "cache": true,
+      "dependsOn": ["^build"]
+    },
+    "lint": {
+      "inputs": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "components/**/*.{ts,tsx,js,jsx}",
+        "lib/**/*.{ts,tsx,js,jsx}",
+        "app/**/*.{ts,tsx,js,jsx}"
+      ],
+      "cache": true,
+      "outputs": [".turbo/**"]
+    },
+    "type-check": {
+      "cache": true,
+      "outputs": [".turbo/**"]
+    },
+    "test": {
+      "cache": true,
+      "outputs": [".turbo/**", "coverage/**"]
+    }
+  }
+}

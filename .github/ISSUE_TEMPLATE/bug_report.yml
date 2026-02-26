@@ -1,0 +1,38 @@
+name: Bug Report
+description: Report a bug in Vibedump
+title: "[Bug] "
+labels: ["bug", "triage-me"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please provide details so we can fix it.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      placeholder: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Go to...
+        2. Click...
+        3. See error...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: What should happen?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      placeholder: Paste any error messages or logs
