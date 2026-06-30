@@ -19,8 +19,14 @@ export async function commitVibe(options: CommitOptions): Promise<string> {
     privateKey: process.env.GITHUB_PRIVATE_KEY!,
   });
 
-  // Get authenticated client
-  const octokit = await app.getInstallationOctokit(options.owner);
+  // Resolve the app installation for this repo, then get an authenticated
+  // client. getInstallationOctokit needs the numeric installation id — not the
+  // owner login (that was the original bug).
+  const { data: installation } = await app.octokit.rest.apps.getRepoInstallation({
+    owner: options.owner,
+    repo: options.repo,
+  });
+  const octokit = await app.getInstallationOctokit(installation.id);
 
   // Get default branch
   const branch = options.branch || "main";
@@ -43,7 +49,7 @@ export async function commitVibe(options: CommitOptions): Promise<string> {
 
   // Create blobs for each file
   const blobs = await Promise.all(
-    Object.entries(options.files).map(([path, content]) =>
+    Object.entries(options.files).map(([, content]) =>
       octokit.rest.git.createBlob({
         owner: options.owner,
         repo: options.repo,

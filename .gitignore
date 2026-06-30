@@ -12,6 +12,7 @@ coverage/
 dist/
 build/
 out/
+*.tsbuildinfo
 
 # Misc
 .DS_Store

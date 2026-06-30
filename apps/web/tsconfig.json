@@ -5,6 +5,8 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "react",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "lib": [
       "ES2020",
       "DOM",
