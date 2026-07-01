@@ -1,3 +1,4 @@
+import "prismjs/themes/prism-tomorrow.css";
 import "./globals.css";
 
 export const metadata = {

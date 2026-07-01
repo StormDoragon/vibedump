@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CodeEditor } from "../components/code-editor";
 import { reviewCodeAction } from "../lib/actions";
 import type { ReviewResult } from "../lib/grok";
 import type { RunLanguage } from "../lib/webcontainer";
@@ -139,11 +140,11 @@ export default function PlaygroundPage() {
               </div>
             </div>
 
-            <textarea
+            <CodeEditor
               value={code}
-              onChange={(e) => setCode(e.target.value)}
-              spellCheck={false}
-              className="h-96 w-full resize-none rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 font-mono text-sm text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
+              onChange={setCode}
+              language={language}
+              disabled={busy}
               placeholder="Paste your Node.js code here..."
             />
 
