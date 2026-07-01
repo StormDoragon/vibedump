@@ -1,10 +1,23 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
-import { CodeEditor } from "../components/code-editor";
 import { reviewCodeAction } from "../lib/actions";
 import type { ReviewResult } from "../lib/grok";
 import type { RunLanguage } from "../lib/webcontainer";
+
+// Monaco touches browser-only APIs, so load it client-side only.
+const MonacoCodeEditor = dynamic(
+  () => import("../components/monaco-editor").then((m) => m.MonacoCodeEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-96 items-center justify-center rounded-lg border border-slate-700 bg-[#1e1e1e] font-mono text-sm text-slate-500">
+        Loading editor…
+      </div>
+    ),
+  },
+);
 
 const STARTER_CODE = `// Paste any Node.js snippet and hit "Run vibe".
 // External npm imports are auto-installed in the sandbox.
@@ -140,12 +153,11 @@ export default function PlaygroundPage() {
               </div>
             </div>
 
-            <CodeEditor
+            <MonacoCodeEditor
               value={code}
               onChange={setCode}
               language={language}
               disabled={busy}
-              placeholder="Paste your Node.js code here..."
             />
 
             <button
