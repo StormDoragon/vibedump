@@ -59,9 +59,10 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: build
+          if-no-files-found: ignore
           path: |
             apps/web/.next
             apps/contracts/target
