@@ -14,6 +14,9 @@ build/
 out/
 *.tsbuildinfo
 
+# Vendored at build time (see apps/web/scripts/copy-monaco.mjs)
+apps/web/public/monaco/
+
 # Misc
 .DS_Store
 *.pem
