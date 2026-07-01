@@ -1,76 +1,39 @@
 /**
- * Next.js Server Actions for Vibe Workflow
- * Coordinates WebContainer, Grok, GitHub, X, and Solana
+ * Server Actions for the vibe workflow.
+ *
+ * The code sandbox (WebContainer) runs entirely in the browser, so it lives in
+ * the client module `./webcontainer`, NOT here. This server action exists only
+ * to keep the xAI API key on the server while performing the AI review.
  */
 
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
-import { roastVibe } from "./grok";
-import { VibeContainer } from "./webcontainer";
-import { commitVibe } from "./github";
+import { type ReviewResult, type ReviewTone, reviewCode } from "./grok";
 
-export interface VibeRunRequest {
+export interface ReviewRequest {
   code: string;
-  files?: Record<string, string>;
-  language?: string; // "ts", "js", "python", "rust", etc.
+  tone?: ReviewTone;
 }
 
-export interface VibeRunResult {
-  logs: string;
-  roast: string;
-  commitHash?: string;
-  xPostUrl?: string;
-  solanaHash?: string;
+export interface ReviewActionResult {
+  review?: ReviewResult;
+  error?: string;
 }
 
-export async function runVibe(request: VibeRunRequest): Promise<VibeRunResult> {
-  const { userId } = await auth();
-  if (!userId) {
-    throw new Error("Unauthorized");
+export async function reviewCodeAction(
+  request: ReviewRequest,
+): Promise<ReviewActionResult> {
+  const code = request.code?.trim();
+  if (!code) {
+    return { error: "Nothing to review — paste some code first." };
   }
 
-  // 1. Boot WebContainer and run code
-  const container = new VibeContainer();
-  await container.boot();
-
-  const { output$ } = await container.runVibe({
-    code: request.code,
-    files: request.files,
-  });
-
-  // Collect logs
-  const logs: string[] = [];
-  for await (const chunk of output$) {
-    logs.push(chunk.toString());
-  }
-
-  const logsOutput = logs.join("\n");
-
-  // 2. Roast with Grok
-  const roastResult = await roastVibe(request.code);
-
-  // 3. (Optional) Commit to GitHub
-  let commitHash: string | undefined;
   try {
-    commitHash = await commitVibe({
-      owner: "sarcasticapes",
-      repo: "vibedump",
-      message: `🔥 Vibe dump from ${userId}: ${roastResult.vibeScore}/100`,
-      files: {
-        [`vibes/${userId}/${Date.now()}.ts`]: request.code,
-        [`vibes/${userId}/${Date.now()}.roast.md`]: roastResult.roast,
-      },
-    });
-  } catch (e) {
-    console.error("GitHub commit failed:", e);
+    const review = await reviewCode(code, request.tone ?? "serious");
+    return { review };
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "AI review failed unexpectedly.";
+    return { error: message };
   }
-
-  await container.dispose();
-
-  return {
-    logs: logsOutput,
-    roast: roastResult.roast,
-    commitHash,
-  };
 }
