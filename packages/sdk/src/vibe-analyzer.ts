@@ -2,7 +2,7 @@
  * Vibe code analyzer
  */
 
-export async function analyzeVibe(code: string): Promise<{
+export async function analyzeVibe(_code: string): Promise<{
   issues: string[];
   score: number;
 }> {

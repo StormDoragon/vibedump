@@ -14,10 +14,13 @@ export interface CommitOptions {
 }
 
 export async function commitVibe(options: CommitOptions): Promise<string> {
-  const app = new App({
-    appId: process.env.GITHUB_APP_ID!,
-    privateKey: process.env.GITHUB_PRIVATE_KEY!,
-  });
+  const appId = process.env.GITHUB_APP_ID;
+  const privateKey = process.env.GITHUB_PRIVATE_KEY;
+  if (!appId || !privateKey) {
+    throw new Error("GITHUB_APP_ID and GITHUB_PRIVATE_KEY must be configured.");
+  }
+
+  const app = new App({ appId, privateKey });
 
   // Resolve the app installation for this repo, then get an authenticated
   // client. getInstallationOctokit needs the numeric installation id — not the

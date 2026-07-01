@@ -14,13 +14,13 @@
   },
   "formatter": {
     "indentStyle": "space",
-    "indentSize": 2,
-    "lineWidth": 100,
-    "trailingCommas": "es5"
+    "indentWidth": 2,
+    "lineWidth": 100
   },
   "javascript": {
     "formatter": {
-      "jsxQuoteStyle": "double"
+      "jsxQuoteStyle": "double",
+      "trailingCommas": "es5"
     }
   },
   "json": {

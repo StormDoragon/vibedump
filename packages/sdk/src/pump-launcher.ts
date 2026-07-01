@@ -19,7 +19,7 @@ export interface PumpLaunchResult {
 }
 
 export async function launchPump(
-  config: PumpLaunchConfig
+  _config: PumpLaunchConfig
 ): Promise<PumpLaunchResult> {
   // Placeholder: Would call Anchor program
   throw new Error("Pump launcher coming soon");

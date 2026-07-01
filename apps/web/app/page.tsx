@@ -42,6 +42,7 @@ export default function PlaygroundPage() {
   const consoleRef = useRef<HTMLDivElement>(null);
 
   // Keep the console scrolled to the latest output.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-run to scroll whenever output changes
   useEffect(() => {
     if (consoleRef.current) {
       consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
@@ -209,9 +210,9 @@ export default function PlaygroundPage() {
 
                   {review.issues.length > 0 && (
                     <ul className="space-y-2">
-                      {review.issues.map((issue, idx) => (
+                      {review.issues.map((issue) => (
                         <li
-                          key={idx}
+                          key={`${issue.severity}:${issue.line ?? ""}:${issue.message}`}
                           className={`rounded-md border px-3 py-2 text-sm ${
                             severityStyles[issue.severity] ?? severityStyles.info
                           }`}
@@ -236,8 +237,8 @@ export default function PlaygroundPage() {
                         Suggestions
                       </h3>
                       <ul className="list-disc space-y-1 pl-5 text-sm text-slate-300">
-                        {review.suggestions.map((s, idx) => (
-                          <li key={idx}>{s}</li>
+                        {review.suggestions.map((suggestion) => (
+                          <li key={suggestion}>{suggestion}</li>
                         ))}
                       </ul>
                     </div>

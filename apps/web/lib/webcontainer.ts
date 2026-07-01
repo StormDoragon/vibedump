@@ -64,9 +64,10 @@ function detectDependencies(code: string): string[] {
   ];
 
   for (const pattern of patterns) {
-    let match: RegExpExecArray | null;
-    while ((match = pattern.exec(code)) !== null) {
+    let match = pattern.exec(code);
+    while (match !== null) {
       const spec = match[1];
+      match = pattern.exec(code); // advance now so the continues below are safe
       if (spec.startsWith(".") || spec.startsWith("/")) continue; // relative
       const bare = spec.startsWith("node:") ? spec.slice(5) : spec;
       const top = bare.startsWith("@")
@@ -78,6 +79,20 @@ function detectDependencies(code: string): string[] {
   }
 
   return [...specifiers];
+}
+
+/**
+ * True when the snippet uses ES module syntax (`import`/`export` statements).
+ * CommonJS snippets (`require` / `module.exports`) return false so they run as
+ * `.cjs` instead of being rejected by ESM mode.
+ */
+function usesEsmSyntax(code: string): boolean {
+  return (
+    /(^|\n)\s*import\s+(?:[^;'"]*\sfrom\s+)?["']/.test(code) ||
+    /(^|\n)\s*export\s+(?:default|const|let|var|function|class|async|\{|\*)/.test(
+      code,
+    )
+  );
 }
 
 async function streamToOutput(
@@ -106,7 +121,13 @@ export async function runCode({
 }: RunCodeOptions): Promise<RunCodeResult> {
   const container = await getContainer();
   const isTs = language === "ts";
-  const entry = isTs ? "index.ts" : "index.js";
+  // Pick the entry extension so the module system matches the snippet:
+  // .mjs for ESM (import/export), .cjs for CommonJS (require), .ts via tsx.
+  const entry = isTs
+    ? "index.ts"
+    : usesEsmSyntax(code)
+      ? "index.mjs"
+      : "index.cjs";
 
   const deps = detectDependencies(code);
   const dependencies: Record<string, string> = {};
@@ -116,7 +137,6 @@ export async function runCode({
   const packageJson = {
     name: "vibe-snippet",
     private: true,
-    type: "module" as const,
     dependencies,
   };
 

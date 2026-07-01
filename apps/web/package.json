@@ -6,9 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome lint src/ app/ lib/ components/ hooks/ --max-diagnostics=40",
+    "lint": "biome lint app/ lib/ --max-diagnostics=40",
     "type-check": "tsc --noEmit",
-    "format": "biome format --write src/ app/ lib/ components/ hooks/"
+    "format": "biome format --write app/ lib/"
   },
   "dependencies": {
     "react": "^18.2.0",
